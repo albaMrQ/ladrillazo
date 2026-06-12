@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Ladrillazo — MrQ</title>
+<link rel="stylesheet" href="ladrillazo.css">
+</head>
+<body>
+<!-- thumbnail for offline bundler -->
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<rect width="100" height="100" fill="#1f6bff"/>
+<rect x="34" y="30" width="32" height="46" fill="#ffc62e" stroke="#1d1733" stroke-width="3"/>
+<rect x="40" y="38" width="8" height="8" fill="#1d1733"/><rect x="52" y="38" width="8" height="8" fill="#1d1733"/>
+<rect x="40" y="52" width="8" height="8" fill="#1d1733"/><rect x="52" y="52" width="8" height="8" fill="#1d1733"/>
+<rect x="44" y="22" width="12" height="9" fill="#13c46a" stroke="#1d1733" stroke-width="3"/>
+</svg>
+</template>
+
+<div id="stage">
+  <div id="phoneWrap">
+    <div id="phone">
+      <div id="screen">
+
+        <!-- ============ SPLASH ============ -->
+        <section class="screen sky splash active" data-screen="splash" data-screen-label="Splash">
+          <div class="clouds" aria-hidden="true">
+            <span class="cloud c1"></span>
+            <span class="cloud c2"></span>
+            <span class="cloud c3"></span>
+          </div>
+          <div class="splash-center">
+            <div class="splash-logo-wrap">
+              <img class="splash-logo" src="assets/logo.png?v=1" alt="Ladrillazo — Everything that goes up, comes down">
+              <div class="splash-dust" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <button class="btn btn-green splash-tap" id="splashTap">TAP TO PLAY</button>
+        </section>
+
+        <!-- ============ 6.1 LOBBY ============ -->
+        <section class="screen sky" data-screen="lobby" data-screen-label="Lobby">
+          <header class="topbar dark">
+            <div class="logo">Mr<span>Q</span></div>
+            <div class="bal-foot"><b id="lobbyBal">£94.50</b> balance</div>
+          </header>
+          <div class="lobby-head">
+            <h1 class="pixel" style="font-family: &quot;DejaVu Sans Mono&quot;">PICK YOUR<br>PLOT</h1>
+            <p class="eyebrow">8 developers · 1 skyline · 60 sec</p>
+          </div>
+          <div class="rooms" id="rooms"><!-- room cards injected --></div>
+          <button class="howto-link" data-go="onboard">How to play</button>
+          <div class="lobby-cta">
+            <button class="btn btn-green big-cta" id="lobbyPlay">Let's play</button>
+          </div>
+          <footer class="rgbar">
+            <span><b>£94.50</b> balance</span>
+            <span class="rgdot ok">● within limits</span>
+            <button class="rglink">Set limits</button>
+          </footer>
+        </section>
+
+        <!-- ============ 6.3 STAKE CONFIRM ============ -->
+        <section class="screen sky" data-screen="bet" data-screen-label="Stake confirm">
+          <header class="topbar dark">
+            <div class="hgroup">
+              <button class="backlite" data-go="lobby">‹</button>
+              <div class="logo">Mr<span>Q</span></div>
+            </div>
+            <div class="bal-foot"><b id="betBal">£94.50</b> balance</div>
+          </header>
+          <div class="bet-body">
+            <h1 class="bet-title">Set your<br>stake</h1>
+            <div class="stake-card">
+              <div class="stepper">
+                <button class="step-btn" id="stepDown">−</button>
+                <div class="stake-readout"><span class="cur">£</span><span id="stakeVal" class="pixel">5</span></div>
+                <button class="step-btn" id="stepUp">+</button>
+              </div>
+              <p class="helper" id="betHelper">Worth <b>£9.60</b> at floor 8 · <b>£12.10</b> at floor 9</p>
+              <div class="chips" id="stakeChips">
+                <button class="chip" data-stake="0.5">£0.50</button>
+                <button class="chip" data-stake="1">£1</button>
+                <button class="chip sel" data-stake="5">£5</button>
+                <button class="chip" data-stake="20">£20</button>
+              </div>
+            </div>
+
+            <div class="autosell">
+              <div class="as-row">
+                <div>
+                  <div class="as-title">Auto-Sell</div>
+                  <div class="eyebrow">Cash out the instant you hit a target</div>
+                </div>
+                <button class="toggle" id="autoToggle" role="switch" aria-checked="false"><i></i></button>
+              </div>
+              <div class="as-dial" id="asDial">
+                <span class="eyebrow">Target</span>
+                <div class="dial-chips" id="dialChips">
+                  <button class="chip" data-mult="1.59">1.59×</button>
+                  <button class="chip sel" data-mult="2.42">2.42×</button>
+                  <button class="chip" data-mult="3.19">3.19×</button>
+                  <button class="chip" data-mult="6.66">6.66×</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="rg-soft" id="rgSoft"></div>
+          </div>
+          <div class="lobby-cta">
+            <button class="btn btn-green big-cta" id="betConfirm">Confirm stake · £5</button>
+          </div>
+          <footer class="rgbar">
+            <span><b>£94.50</b> balance</span>
+            <span class="rgdot ok">● within limits</span>
+            <button class="rglink" data-go="onboard">How to play</button>
+            <button class="rglink">Set limits</button>
+          </footer>
+        </section>
+
+        <!-- ============ 6.2 MATCHMAKING ============ -->
+        <section class="screen sky" data-screen="match" data-screen-label="Matchmaking">
+          <div class="match-body">
+            <h2 class="match-title pixel" style="font-size: 36px; text-align: center">BUILDING<br>THE CITY…</h2>
+            <div class="seats-card">
+              <p class="eyebrow center">Finding rival developers…</p>
+              <div class="seats" id="seats"><!-- 8 seats injected --></div>
+            </div>
+            <div class="tipcard">
+              <div class="tip-tag mono">EL LADRILLO SAYS</div>
+              <p id="matchTip">Median tower falls around floor 9. The sweet spot is floors 6–10 — greed past that is on you.</p>
+            </div>
+            <p class="eyebrow center quiet">Seats fill with house regulars if the city's quiet.</p>
+          </div>
+        </section>
+
+        <!-- ============ 6.4 HUD (the money screen) ============ -->
+        <section class="screen" data-screen="hud" data-screen-label="HUD">
+          <header class="hud-top">
+            <div class="logo small">Mr<span>Q</span></div>
+            <div class="hud-balance"><span class="mono">BAL</span> <b id="hudBal">£89.50</b></div>
+            <div class="hud-round mono">ROUND <b id="roundNo">07</b></div>
+          </header>
+
+          <div class="ticker"><div class="ticker-track" id="ticker" style="height: 18px"></div></div>
+
+          <div class="skyline sky" id="skyline">
+            <div class="clouds" aria-hidden="true">
+              <span class="cloud c1"></span>
+              <span class="cloud c2"></span>
+              <span class="cloud c3"></span>
+            </div>
+            <div class="storm-fx" aria-hidden="true">
+              <span class="bolt b1"></span>
+              <span class="bolt b2"></span>
+              <span class="flash"></span>
+            </div>
+            <div class="myhud">
+              <div class="my-readout">
+                <div class="my-mult"><span id="myMult" class="pixel">1.92</span><span class="x" style="font-size: 17px">×</span></div>
+                <div class="my-pay">≈ <b id="myPay">£9.60</b></div>
+              </div>
+              <div class="my-risk-wrap">
+                <div class="risk-head"><span class="mono risklbl">RISK</span><span class="mono" id="myRiskPct">17%</span></div>
+                <div class="risk big" id="myRisk"><i></i></div>
+              </div>
+            </div>
+            <div class="towers" id="towers"><!-- rival + my towers injected --></div>
+            <div class="ground" aria-hidden="true"></div>
+            <div class="event-banner" id="eventBanner"><span class="ev-icon" id="evIcon">🏦</span><div class="ev-text"><b id="evTitle">Interest Rate Hike</b><span id="evSub">Rates up! Everyone panics.</span></div></div>
+          </div>
+
+          <div class="control-deck">
+            <div class="favors" id="favors" style="background-color: rgb(108, 102, 129); margin: -13px -14px 10px">
+              <div class="fav-top">
+                <div class="fav-titlerow"><span class="mono fav-label">FAVORS</span><b id="favCount">3</b></div>
+                <span class="fav-hint mono" id="favHint">tap to arm</span>
+              </div>
+              <div class="fav-tray" id="favTray"><!-- cards injected --></div>
+            </div>
+            <div class="timerbar" id="timerbar"><i id="timerFill"></i><span class="t-num mono" id="timerNum">5.0s</span></div>
+            <div class="hint" id="hudHint" style="font-size: 11px; color: rgb(160, 159, 163)">Build to climb · Sell to bank</div>
+            <div class="bigbtns">
+              <button class="btn btn-blue act-btn" id="buildBtn">BUILD ▲</button>
+              <button class="btn btn-green act-btn" id="sellBtn">SELL</button>
+            </div>
+          </div>
+
+          <!-- block counter window -->
+          <div class="block-window" id="blockWindow">
+            <div class="bw-card">
+              <div class="bw-icon">🚨</div>
+              <b>Cement Shortage!</b>
+              <span class="mono">incoming · from: La Jefa</span>
+              <button class="btn btn-gold" id="blockBtn">BLOCK? 🛡</button>
+              <div class="bw-timer"><i id="bwFill"></i></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 6.7 END OF MATCH ============ -->
+        <section class="screen end-sky" data-screen="end" data-screen-label="End of match">
+          <div class="end-body">
+            <div class="end-stage sky">
+              <div class="clouds end-clouds" aria-hidden="true">
+                <span class="cloud c1"></span>
+                <span class="cloud c2"></span>
+                <span class="cloud c3"></span>
+              </div>
+              <div class="money-rain" aria-hidden="true">
+                <span class="bill"></span><span class="bill"></span><span class="bill"></span>
+                <span class="bill"></span><span class="bill"></span><span class="bill"></span>
+                <span class="bill"></span><span class="bill"></span><span class="bill"></span>
+                <span class="bill"></span><span class="bill"></span><span class="bill"></span>
+              </div>
+              <div class="podium" id="podium"><!-- top3 injected --></div>
+            </div>
+            <div class="board" id="board"><!-- ranks 4-8 injected --></div>
+          </div>
+          <div class="res-cta">
+            <button class="btn btn-paper half" id="endChange" data-go="bet">Change stake</button>
+            <button class="btn btn-green half" id="endAgain">Play again</button>
+          </div>
+        </section>
+
+        <!-- ============ 6.8 RESULTS / PERSONAL ============ -->
+        <section class="screen sky" data-screen="results" data-screen-label="Results">
+          <div class="res-body" id="resBody"><!-- result content injected (win/loss variants) --></div>
+          <div class="res-cta">
+            <button class="btn btn-paper half" id="resChange" data-go="bet">Change stake</button>
+            <button class="btn btn-green half" id="resAgain">Play again <span id="reqTimer" class="mono">5</span></button>
+          </div>
+          <footer class="rgbar">
+            <span class="mono">SESSION <b id="sessTime">06:12</b></span>
+            <span class="mono">NET <b id="sessNet" class="net-pos">+£7.10</b></span>
+            <button class="rglink">Take a break</button>
+          </footer>
+        </section>
+
+        <!-- ============ 6.9 ONBOARDING ============ -->
+        <section class="screen sky" data-screen="onboard" data-screen-label="Onboarding">
+          <button class="skip" id="skipOnboard">Skip ›</button>
+          <div class="favors" id="obFavors" hidden>
+            <div class="fav-top">
+              <div class="fav-titlerow"><span class="mono fav-label">FAVORS</span><b>3</b></div>
+              <span class="fav-hint mono">tap one to try</span>
+            </div>
+            <div class="fav-tray" id="obFavTray"><!-- cards injected --></div>
+          </div>
+          <div class="ob-stage">
+            <div class="ob-tower" id="obTower"></div>
+            <div class="ob-dust" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+          <div class="ob-mascot">
+            <img class="brick" src="assets/ladrillo.png?v=1" alt="El Ladrillo" aria-hidden="true">
+            <div class="speech" id="obSpeech">¡Hola! I'm El Ladrillo. Tap <b>BUILD</b> to stack a floor — your number climbs.</div>
+          </div>
+          <div class="ob-deck">
+            <div class="bigbtns">
+              <button class="btn btn-blue act-btn" id="obBuild" style="margin: 16px 4px 16px 16px">BUILD ▲</button>
+              <button class="btn btn-green act-btn" id="obSell" style="margin: 16px 16px 16px 8px">SELL</button>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /screen -->
+
+      <!-- toast + global scrim live above screens -->
+      <div id="toast"></div>
+    </div><!-- /phone -->
+  </div><!-- /phoneWrap -->
+</div><!-- /stage -->
+
+<!-- calm-mode toggle (floats outside phone) -->
+<button id="calmToggle" title="Reduced-motion / calm mode">🎚 Calm mode: <b>off</b></button>
+
+<!-- ============ TWEAKS PANEL (design tool) ============ -->
+<aside id="tweaksPanel" hidden>
+  <div class="tw-head"><b>Tweaks</b><button class="tw-x" id="twClose" title="Close">✕</button></div>
+  <div class="tw-body">
+    <div class="tw-sec">
+      <div class="tw-tog tw-tog-freeze" data-k="freeze"><span>❄ Freeze game</span><span class="sw"></span></div>
+      <p class="tw-note" style="margin:0">On: the game holds still so you can edit states. Off: it plays live.</p>
+    </div>
+    <div class="tw-sec">
+      <div class="tw-h">Screen</div>
+      <select class="tw-sel" id="twScreen">
+        <option value="splash">Splash</option>
+        <option value="lobby">Lobby</option>
+        <option value="bet">Stake confirm</option>
+        <option value="match">Matchmaking</option>
+        <option value="hud">In-game HUD</option>
+        <option value="end">End of match</option>
+        <option value="results">Results</option>
+        <option value="onboard">Onboarding</option>
+      </select>
+    </div>
+
+    <div class="tw-sec" id="twHud">
+      <div class="tw-h">In-game HUD states</div>
+      <div class="tw-row">
+        <label>My state</label>
+        <div class="tw-seg" id="twMyState">
+          <button data-v="build">Building</button>
+          <button data-v="hold">Hold</button>
+          <button data-v="sold">Sold</button>
+          <button data-v="down">Down</button>
+        </div>
+      </div>
+      <div class="tw-row">
+        <label>My floor <span class="val" id="twFloorVal">9</span></label>
+        <input class="tw-range" type="range" id="twFloor" min="0" max="16" step="1" value="9">
+      </div>
+      <div class="tw-row">
+        <label>Round <span class="val" id="twRoundVal">7</span></label>
+        <input class="tw-range" type="range" id="twRound" min="1" max="20" step="1" value="7">
+      </div>
+      <div class="tw-row">
+        <label>Market event</label>
+        <select class="tw-sel" id="twEvent"><option value="none">None</option></select>
+      </div>
+      <div class="tw-toggles">
+        <div class="tw-tog" data-k="storm"><span>Storm sky</span><span class="sw"></span></div>
+        <div class="tw-tog" data-k="timerLow"><span>Timer low (pulsing)</span><span class="sw"></span></div>
+        <div class="tw-tog" data-k="targeting"><span>Targeting mode</span><span class="sw"></span></div>
+        <div class="tw-tog" data-k="blockWindow"><span>Sabotage BLOCK window</span><span class="sw"></span></div>
+        <div class="tw-tog" data-k="buttonsLocked"><span>Buttons locked</span><span class="sw"></span></div>
+      </div>
+    </div>
+
+    <div class="tw-sec" id="twEnd">
+      <div class="tw-h">End / Results outcome</div>
+      <div class="tw-row">
+        <div class="tw-seg" id="twOutcome">
+          <button data-v="win">You won</button>
+          <button data-v="loss">You collapsed</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="tw-note">Changes apply and persist. Use <b>Freeze game</b> to hold every state still for editing, or turn it off to watch live play.</p>
+  </div>
+</aside>
+
+<script src="ladrillazo.js"></script>
+<script>
+/* ===== Tweaks host protocol + in-game state controls ===== */
+(function(){
+  const TWEAKS = /*EDITMODE-BEGIN*/{
+    "freeze": false,
+    "screen": "splash",
+    "myState": "build",
+    "myFloor": 12,
+    "round": 1,
+    "event": "none",
+    "storm": false,
+    "timerLow": false,
+    "favorsTray": false,
+    "targeting": false,
+    "blockWindow": false,
+    "buttonsLocked": false,
+    "outcome": "win"
+  }/*EDITMODE-END*/;
+
+  const tw = Object.assign({}, TWEAKS);
+  const $ = (s)=>document.querySelector(s);
+  const panel = $('#tweaksPanel');
+  let active = false;
+
+  function persist(patch){
+    try{ window.parent.postMessage({type:'__edit_mode_set_keys', edits:patch}, '*'); }catch(e){}
+  }
+  function set(patch){ Object.assign(tw, patch); persist(patch); apply(); }
+
+  // populate event dropdown from the engine
+  function fillEvents(){
+    const sel=$('#twEvent');
+    (window.LAD?.EVENTS||[]).forEach(ev=>{
+      const o=document.createElement('option'); o.value=ev.t; o.textContent=ev.ic+' '+ev.t; sel.appendChild(o);
+    });
+  }
+
+  function syncUI(){
+    $('#twScreen').value = tw.screen;
+    [...$('#twMyState').children].forEach(b=>b.classList.toggle('on', b.dataset.v===tw.myState));
+    [...$('#twOutcome').children].forEach(b=>b.classList.toggle('on', b.dataset.v===tw.outcome));
+    $('#twFloor').value = tw.myFloor; $('#twFloorVal').textContent = tw.myFloor;
+    $('#twRound').value = tw.round; $('#twRoundVal').textContent = tw.round;
+    $('#twEvent').value = tw.event;
+    document.querySelectorAll('#tweaksPanel .tw-tog').forEach(t=>t.classList.toggle('on', !!tw[t.dataset.k]));
+    // show HUD controls only on HUD; outcome only on end/results
+    $('#twHud').style.display   = tw.screen==='hud' ? '' : 'none';
+    $('#twEnd').style.display   = (tw.screen==='end'||tw.screen==='results') ? '' : 'none';
+    // state controls only matter while frozen — dim them when live
+    [$('#twHud'),$('#twEnd')].forEach(el=>{ el.style.opacity = tw.freeze?'1':'.4'; el.style.pointerEvents = tw.freeze?'':'none'; });
+  }
+
+  function apply(){
+    if(!active || !window.LAD) return;
+    window.LAD.setDesign(tw.freeze);
+    if(tw.freeze){
+      if(tw.screen==='end' || tw.screen==='results'){ window.LAD.go(tw.screen, tw.outcome); }
+      else if(tw.screen==='hud'){ window.LAD.go('hud'); window.LAD.applyHud(tw); }
+      else { window.LAD.go(tw.screen); }
+    } else {
+      window.LAD.go(tw.screen); // live — let the game run
+    }
+    syncUI();
+  }
+
+  // ---- controls ----
+  $('#twScreen').addEventListener('change', e=> set({screen:e.target.value}));
+  $('#twMyState').addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) set({myState:b.dataset.v}); });
+  $('#twOutcome').addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) set({outcome:b.dataset.v}); });
+  $('#twFloor').addEventListener('input', e=>{ $('#twFloorVal').textContent=e.target.value; set({myFloor:+e.target.value}); });
+  $('#twRound').addEventListener('input', e=>{ $('#twRoundVal').textContent=e.target.value; set({round:+e.target.value}); });
+  $('#twEvent').addEventListener('change', e=> set({event:e.target.value}));
+  document.querySelectorAll('#tweaksPanel .tw-tog').forEach(t=>{
+    t.addEventListener('click', ()=>{ const k=t.dataset.k; set({[k]: !tw[k]}); });
+  });
+
+  // ---- host protocol ----
+  function activate(){ active=true; panel.hidden=false; fillEventsOnce(); syncUI(); apply(); }
+  function deactivate(){ active=false; panel.hidden=true; if(window.LAD){ window.LAD.setDesign(false); window.LAD.go('lobby'); } }
+  let filled=false; function fillEventsOnce(){ if(!filled){ fillEvents(); filled=true; } }
+
+  window.addEventListener('message', (e)=>{
+    const t=e.data && e.data.type;
+    if(t==='__activate_edit_mode') activate();
+    else if(t==='__deactivate_edit_mode') deactivate();
+  });
+  $('#twClose').addEventListener('click', ()=>{
+    deactivate();
+    try{ window.parent.postMessage({type:'__edit_mode_dismissed'}, '*'); }catch(e){}
+  });
+
+  // announce availability AFTER listener is live
+  try{ window.parent.postMessage({type:'__edit_mode_available'}, '*'); }catch(e){}
+
+  // honor a persisted freeze on load — keeps the game stopped even with the panel closed
+  function bootFreeze(){
+    if(tw.freeze && window.LAD){
+      window.LAD.setDesign(true);
+      if(tw.screen==='end' || tw.screen==='results'){ window.LAD.go(tw.screen, tw.outcome); }
+      else if(tw.screen==='hud'){ window.LAD.go('hud'); window.LAD.applyHud(tw); }
+      else { window.LAD.go(tw.screen); }
+    }
+  }
+  if(window.LAD) bootFreeze(); else window.addEventListener('load', bootFreeze);
+})();
+</script>
+</body>
+</html>
+
+<style id="__om-edit-overrides">
+#favTray >.fc-off >.fc-name { font-size: 10px !important }
+#favTray >.fc-tempo >.fc-name { font-size: 10px !important }
+#favTray >.fc-def >.fc-name { font-size: 10px !important }
+#favTray >.fc-def >.fc-name { font-size: 11px !important }
+#favTray >.fc-tempo >.fc-name { font-size: 11px !important }
+#favTray >.fc-off >.fc-name { font-size: 11px !important }
+#favTray >.fc-off >.fc-eff { font-size: 9px !important }
+#favTray >.fc-off >.fc-eff { font-size: 10px !important }
+#favTray >.fc-tempo >.fc-eff { font-size: 10px !important }
+#favTray >.fc-def >.fc-eff { font-size: 10px !important }
+#favTray >.fc-off { justify-content: center !important }
+#favTray >.fc-tempo { justify-content: center !important }
+#favTray >.fc-def { justify-content: center !important }
+#favTray >.fc-def >.fc-ico { font-size: 16px !important }
+#favTray >.fc-def >.fc-ico { font-size: 15px !important }
+#favTray >.fc-tempo >.fc-ico { font-size: 15px !important }
+#favTray >.fc-off >.fc-ico { font-size: 15px !important }
+#favTray >.fc-off >.fc-ico { height: 19px !important }
+#favTray >.fc-tempo >.fc-ico { height: 17px !important }
+#favTray >.fc-def >.fc-eff { font-size: 9px !important }
+#favTray >.fc-tempo >.fc-eff { font-size: 9px !important }
+#favTray >.fc-off >.fc-eff { font-size: 9px !important }
+#favTray >.fc-off >.fc-eff { height: 12px !important }
+#favTray >.fc-off >.fc-eff { height: 11px !important }
+#towers >.hold >.t-flag { height: 48px !important }
+#towers >.hold >.t-flag { text-align: center !important }
+#towers >.hold :is(img,video) { height: 41px !important }
+</style>
